@@ -42,3 +42,61 @@ textarea {
   row-gap: 0.5rem;
   grid-template-columns: repeat(4, 1fr);
 }
+
+/* Fundo escuro semi-transparente */
+.modal {
+  display: none; /* Esconde por padrão */
+  position: fixed;
+  z-index: 10;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.6);
+  justify-content: center;
+  align-items: center;
+}
+
+/* Caixa do modal */
+.modal-content {
+  background-color: #fff;
+  padding: 20px 30px;
+  border-radius: 12px;
+  text-align: center;
+  max-width: 400px;
+  width: 90%;
+  box-shadow: 0 0 15px rgba(0, 0, 0, 0.3);
+  animation: aparecer 0.3s ease;
+}
+
+/* Animação suave */
+@keyframes aparecer {
+  from {
+    transform: scale(0.8);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+/* Botão de fechar */
+.fechar {
+  float: right;
+  font-size: 24px;
+  cursor: pointer;
+  color: #555;
+}
+.fechar:hover {
+  color: #000;
+}
+
+/* Estilo da lista */
+#listaGanhadores li {
+  list-style: none;
+  background: #f1f1f1;
+  margin: 8px 0;
+  padding: 8px;
+  border-radius: 8px;
+}

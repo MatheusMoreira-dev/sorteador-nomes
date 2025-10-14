@@ -16,23 +16,31 @@
           <input id="tipo" value="Nomes" readonly />
         </div>
 
-        <button id="sortear" onclick="executarSorteio()">Sortear</button>
+        <button id="sortear" onclick="mostrarGanhadores()">Sortear</button>
       </div>
 
-      <div>
+      <div class="input-names">
         <textarea
           id="add-nomes"
           placeholder="Adicionar participante(s)"
         ></textarea>
-        <button id="addNome" onclick="appendListaNomes()">Add</button>
+        <button id="addNome" onclick="addParticipantes()">Add</button>
       </div>
 
-      <div>
-        <ul id="lista-nomes"></ul>
+      <div class="container-participants">
+        <ul id="lista-participantes"></ul>
       </div>
 
-      <div>
-        <ul id="lista-excluidos"></ul>
+      <div class="container-last-winners">
+        <ul id="lista-ganhadores"></ul>
+      </div>
+
+      <div id="modal" class="modal">
+        <div class="modal-content">
+          <span id="fecharModal" class="fechar">&times;</span>
+          <h2>🎉 Ganhadores do Sorteio 🎉</h2>
+          <ul id="ganhadores-da-rodada"></ul>
+        </div>
       </div>
     </main>
     <footer></footer>
