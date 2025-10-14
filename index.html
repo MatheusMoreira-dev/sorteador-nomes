@@ -8,23 +8,28 @@
   </head>
 
   <body>
-    <head></head>
+    <header></header>
     <main>
       <div class="painel">
-        <div class="opcoes">
-          <input id="total-sorteios" />
-          <input id="tipo" value="Nomes" readonly />
-        </div>
-
-        <button id="sortear" onclick="mostrarGanhadores()">Sortear</button>
+        <input id="total-sorteios" />
+        <button
+          id="sortear"
+          class="button-action"
+          onclick="mostrarGanhadores()"
+        >
+          Sortear
+        </button>
       </div>
 
       <div class="input-names">
         <textarea
           id="add-nomes"
           placeholder="Adicionar participante(s)"
+          rows="1"
         ></textarea>
-        <button id="addNome" onclick="addParticipantes()">Add</button>
+        <button id="addNome" class="button-action" onclick="addParticipantes()">
+          Adicionar
+        </button>
       </div>
 
       <div class="container-participants">
@@ -32,13 +37,14 @@
       </div>
 
       <div class="container-last-winners">
+        <p>Ganhadores:</p>
         <ul id="lista-ganhadores"></ul>
       </div>
 
       <div id="modal" class="modal">
         <div class="modal-content">
           <span id="fecharModal" class="fechar">&times;</span>
-          <h2>🎉 Ganhadores do Sorteio 🎉</h2>
+          <h2 class="modal-title">🎉 Ganhadores do Sorteio 🎉</h2>
           <ul id="ganhadores-da-rodada"></ul>
         </div>
       </div>

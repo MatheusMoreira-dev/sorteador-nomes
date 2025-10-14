@@ -1,11 +1,4 @@
-let inputTexto = document.getElementById("add-nomes");
-let participantes = document.getElementById("lista-participantes");
-let sorteiosPorRodada = document.getElementById("total-sorteios");
-
-// modal
-const modal = document.getElementById("modal");
-const fecharModal = document.getElementById("fecharModal");
-const ganhadoresRodada = document.getElementById("ganhadores-da-rodada");
+/*------------------Funções Utilitárias--------------------- */
 
 // Transforma uma String em um array separado por '\n'
 function splitString(str = "") {
@@ -41,52 +34,81 @@ function nodeToList({ nodeList, callBack }) {
   return array;
 }
 
-// Adiciona participante(s) na lista de participantes
-function addParticipantes() {
-  let jogadores = splitString(inputTexto.value);
-  jogadores.forEach((j) => appendTo({ node: participantes, value: j }));
+/*------------------Elementos---------------------*/
 
-  inputTexto.value = "";
+// Inputs
+let inputNomes = document.getElementById("add-nomes");
+let sorteiosPorRodada = document.getElementById("total-sorteios");
+
+// Participantes
+let containerParticipantes = document.querySelector(".container-participants");
+let listaParticipantes = document.getElementById("lista-participantes");
+
+// Ganhadores
+let containerGanhadores = document.querySelector(".container-last-winners");
+let listaGanhadores = document.getElementById("lista-ganhadores");
+
+/*------------------Lógica do Sorteio--------------------- */
+
+// Adiciona participante(s) na lista
+function addParticipantes() {
+  let jogadores = splitString(inputNomes.value);
+  jogadores.forEach((j) => appendTo({ node: listaParticipantes, value: j }));
+
+  inputNomes.value = "";
+  containerParticipantes.style.display = "block";
 }
 
 // Sorteia um item
 function sortear() {
   let arrayParticipantes = nodeToList({
-    nodeList: participantes.childNodes,
+    nodeList: listaParticipantes.childNodes,
     callBack: (x) => x.textContent,
   });
+
   let randomIndex = parseInt(Math.random() * arrayParticipantes.length);
   let ganhador = arrayParticipantes[randomIndex];
 
-  removeFrom({ node: participantes, index: randomIndex });
+  removeFrom({ node: listaParticipantes, index: randomIndex });
+  appendTo({ node: listaGanhadores, value: ganhador });
 
   return ganhador;
 }
 
-// Sorteia a quantidade informada de sorteios por rodada
+// Executa o Sorteio
 function sorteio() {
-  return new Array(2).map((s, i) => `${i + 1} - ${sortear()}`);
+  let ganhadores = [];
+
+  for (let i = 0; i < sorteiosPorRodada.value; i++) {
+    ganhadores.push(`${i + 1} - ${sortear()}`);
+  }
+
+  containerGanhadores.style.display = "block";
+  return ganhadores;
 }
 
-// Preenche a lista automaticamente
+/*------------------Modal do Resultado---------------------*/
+
+const modal = document.getElementById("modal");
+const fecharModal = document.getElementById("fecharModal");
+const ganhadoresRodada = document.getElementById("ganhadores-da-rodada");
+
 function mostrarGanhadores() {
-  ganhadoresRodada.innerHTML = ""; // limpa antes
-  console.log(sorteio());
+  ganhadoresRodada.innerHTML = "";
+
   sorteio().forEach((nome) => {
     const li = document.createElement("li");
     li.textContent = nome;
     ganhadoresRodada.appendChild(li);
   });
+
   modal.style.display = "flex";
 }
 
-// Fecha o modal
 const closeModal = () => (modal.style.display = "none");
 
-// Eventos
 fecharModal.addEventListener("click", closeModal);
 
-// Fecha ao clicar fora do modal
 window.addEventListener("click", (e) => {
   if (e.target === modal) fechar();
 });
