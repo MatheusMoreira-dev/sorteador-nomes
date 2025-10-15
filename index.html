@@ -8,17 +8,20 @@
   </head>
 
   <body>
-    <header></header>
+    <header>
+      <img id="titulo" src="./assets/titulo.png" />
+      <img id="patrocinador-item" src="./assets/M7.png" />
+    </header>
     <main>
       <div class="painel">
-        <input id="total-sorteios" />
         <button
           id="sortear"
           class="button-action"
           onclick="mostrarGanhadores()"
         >
-          Sortear
+          SORTEAR
         </button>
+        <input id="total-sorteios" />
       </div>
 
       <div class="input-names">
@@ -49,7 +52,6 @@
         </div>
       </div>
     </main>
-    <footer></footer>
     <script src="./app.js"></script>
   </body>
 </html>

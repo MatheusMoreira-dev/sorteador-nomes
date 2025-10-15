@@ -50,6 +50,21 @@ let listaGanhadores = document.getElementById("lista-ganhadores");
 
 /*------------------Lógica do Sorteio--------------------- */
 
+localStorage.setItem("participantes", JSON.stringify([]));
+localStorage.setItem("ganhadores", JSON.stringify([]));
+
+const updateStorage = ({ key, item }) =>
+  localStorage.setItem(String(key), JSON.stringify(item));
+
+function resetStorage() {
+  let qtdItens = localStorage.length;
+
+  for (let i = 0; i < qtdItens; i++) {
+    let key = localStorage.key(i);
+    localStorage.setItem(key, "");
+  }
+}
+
 // Adiciona participante(s) na lista
 function addParticipantes() {
   let jogadores = splitString(inputNomes.value);
