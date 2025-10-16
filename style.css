@@ -25,13 +25,16 @@ header {
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: 3rem 0rem;
+  margin: 3rem 0rem;
   gap: 1rem;
 }
 
 header img {
-  width: 80dvw;
   object-fit: contain;
+}
+
+header #titulo-logo {
+  width: 80dvw;
 }
 
 header #patrocinador-item {
@@ -48,7 +51,6 @@ main {
 .painel {
   display: flex;
   align-items: center;
-  justify-content: center;
   gap: 1rem;
 }
 
@@ -94,9 +96,8 @@ main {
 
 .container-participants {
   display: none;
-  width: 90dvw;
-  height: 30dvh;
-  max-height: 500px;
+  max-width: 90dvw;
+  max-height: 30dvh;
   padding: 1rem;
   border-radius: 1rem;
   overflow-y: auto;
@@ -110,9 +111,13 @@ main {
 }
 
 #lista-participantes {
-  columns: 4;
-  column-gap: 1.2rem;
-  column-rule: 1px solid var(--color-primaria);
+  display: grid;
+  grid-auto-flow: column;
+  grid-template-rows: repeat(auto-fill, minmax(1rem, auto));
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  max-width: 800px; /* ~4 colunas */
+  gap: 10px;
+  max-height: 400px;
 }
 
 #lista-participantes li {

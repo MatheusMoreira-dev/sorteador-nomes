@@ -2,7 +2,10 @@
 
 // Transforma uma String em um array separado por '\n'
 function splitString(str = "") {
-  return str.split("\n").map((v) => v.trim().replaceAll(/\s+/gimu, " "));
+  return str
+    .split("\n")
+    .map((v) => v.trim().replaceAll(/\s+/gimu, " "))
+    .filter((s) => !/^\s*$/.test(s));
 }
 
 // Adiciona um item ao final de um nó
@@ -41,6 +44,7 @@ let inputNomes = document.getElementById("add-nomes");
 let sorteiosPorRodada = document.getElementById("total-sorteios");
 
 // Participantes
+let buttonAdd = document.getElementById("addNome");
 let containerParticipantes = document.querySelector(".container-participants");
 let listaParticipantes = document.getElementById("lista-participantes");
 
@@ -53,8 +57,9 @@ let listaGanhadores = document.getElementById("lista-ganhadores");
 localStorage.setItem("participantes", JSON.stringify([]));
 localStorage.setItem("ganhadores", JSON.stringify([]));
 
-const updateStorage = ({ key, item }) =>
+function updateStorage({ key, item }) {
   localStorage.setItem(String(key), JSON.stringify(item));
+}
 
 function resetStorage() {
   let qtdItens = localStorage.length;
@@ -101,6 +106,35 @@ function sorteio() {
   containerGanhadores.style.display = "block";
   return ganhadores;
 }
+
+/*------------------Conteúdo Dinâmico--------------------- */
+
+const templateColunas = {
+  alturaMaxColuna: 400,
+  unidade: "px",
+  qtdMaxColunas: 4,
+};
+
+function calcularColunas({ alturaMaxColuna, unidade, qtdMaxColunas, lista }) {
+  /*
+  display: grid;
+  grid-auto-flow: column; 
+  gap: 10px;
+  grid-auto-rows: minmax(2rem, auto); 
+  max-height: 400px;
+  overflow-y: auto;
+  justify-content: start;
+  */
+
+  const colunasAtuais = Math.ceil(lista.scrollHeight / alturaMaxColuna);
+  if (colunasAtuais > qtdMaxColunas) {
+    lista.style.maxHeight = `${
+      alturaMaxColuna / (colunasAtuais / 4)
+    }${unidade}`;
+  }
+}
+
+buttonAdd.addEventListener("click", calcularColunas(templateColunas));
 
 /*------------------Modal do Resultado---------------------*/
 
