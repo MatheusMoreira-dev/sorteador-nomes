@@ -165,20 +165,30 @@ main {
   align-items: center;
 }
 
+.modal-content::-webkit-scrollbar {
+  display: none;
+}
+
 /* Caixa do modal */
 .modal-content {
-  background-color: #fff;
+  background-color: var(--color-secundaria);
   padding: 1.5rem;
   border-radius: 1rem;
-  max-width: 400px;
   width: 90%;
   box-shadow: 0 0 15px rgba(0, 0, 0, 0.3);
   animation: aparecer 0.3s ease;
+  max-height: 70dvh;
+  max-width: 80dvw;
+  overflow-y: auto;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
 }
 
 .modal-title {
+  color: var(--color-primaria);
   text-align: center;
-  margin-bottom: 0.5rem;
+  margin-bottom: 3rem;
+  font-size: 3rem;
 }
 
 /* Animação suave */
@@ -214,7 +224,10 @@ main {
 /* Estilo da lista */
 #ganhadores-da-rodada li {
   list-style: none;
-  background: #f1f1f1;
+  hyphens: auto;
+  font-size: 3rem;
+  color: white;
+  background: var(--color-primaria);
   padding: 0.5rem;
   border-radius: 1rem;
 }

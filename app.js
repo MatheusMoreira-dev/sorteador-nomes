@@ -1,4 +1,30 @@
 /*------------------Funções Utilitárias--------------------- */
+
+// Excluir valores repeter
+function excludeEqualsValues(values = []) {
+  const normalize = (str = "") => {
+    return str
+      .normalize("NFD")
+      .replace(/[\u0300-\u036f]/g, "")
+      .replace(/[^a-zA-Z0-9]/g, "")
+      .toLowerCase();
+  };
+
+  let unicos = new Set();
+  let result = [];
+
+  for (let name of values) {
+    let key = normalize(name);
+
+    if (!unicos.has(key)) {
+      unicos.add(key);
+      result.push(name);
+    }
+  }
+
+  return result;
+}
+
 // Transforma uma String em um array separado por '\n'
 function splitString(str = "") {
   return str
@@ -32,6 +58,7 @@ const deleteAll = () => localStorage.clear();
 // Inputs
 let inputNomes = document.getElementById("add-nomes");
 let sorteiosPorRodada = document.getElementById("total-sorteios");
+sorteiosPorRodada.value = 1;
 
 // Jogadores
 let buttonClear = document.getElementById("limpar-local-storage");
@@ -88,9 +115,13 @@ let tagImg = document.getElementById("patrocinador-item");
 let indexImg = 1;
 
 tagImg.addEventListener("click", () => {
-  let imagens = ["assets/paraiso.png", "assets/M7.png"];
+  let imagens = [
+    { path: "assets/paraiso.png", n: 3 },
+    { path: "assets/M7.png", n: 1 },
+  ];
   indexImg = (indexImg + 1) % imagens.length;
-  tagImg.src = imagens[indexImg];
+  sorteiosPorRodada.value = imagens[indexImg].n;
+  tagImg.src = imagens[indexImg].path;
 });
 
 /*------------------Lógica do Sorteio--------------------- */
@@ -106,7 +137,7 @@ let ganhadores = localStorage.ganhadores
 
 function addJogadores() {
   // Adiciona novos jogadores e salva no local storage
-  jogadores.push(...splitString(inputNomes.value));
+  jogadores.push(...excludeEqualsValues(splitString(inputNomes.value)));
   save("jogadores", jogadores);
 
   inputNomes.value = ""; //Limpa Input
