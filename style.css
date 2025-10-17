@@ -110,17 +110,16 @@ main {
 
 #lista-participantes {
   display: grid;
-  text-align: center;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  text-align: left;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1rem;
   max-width: 90dvw;
   max-height: 30dvh;
-  gap: 10px;
 }
 
 #lista-participantes li {
   break-inside: avoid;
   word-break: break-all;
-  padding: 0.15rem 0;
 }
 
 #lista-ganhadores li,

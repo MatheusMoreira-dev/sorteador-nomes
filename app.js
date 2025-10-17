@@ -33,7 +33,8 @@ const deleteAll = () => localStorage.clear();
 let inputNomes = document.getElementById("add-nomes");
 let sorteiosPorRodada = document.getElementById("total-sorteios");
 
-// Participantes
+// Jogadores
+let buttonClear = document.getElementById("limpar-local-storage");
 let buttonAdd = document.getElementById("addNome");
 let containerJogadores = document.querySelector(".container-participants");
 let listaJogadores = document.getElementById("lista-participantes");
@@ -73,18 +74,26 @@ window.addEventListener("load", () => {
   }
 });
 
+buttonClear.addEventListener("click", () => {
+  deleteAll();
+  listaJogadores.innerHTML = "";
+  listaGanhadores.innerHTML = "";
+  containerJogadores.style.display = "none";
+  containerGanhadores.style.display = "none";
+});
+
 let tagImg = document.getElementById("patrocinador-item");
+let indexImg = 1;
 
-function alterarImagem() {
+tagImg.addEventListener("click", () => {
   let imagens = ["assets/paraiso.png", "assets/M7.png"];
-  console.log(tagImg.src);
-  tagImg.src = imagens.find((s) => s != tagImg.src);
-}
-
-tagImg.addEventListener("click", alterarImagem);
+  indexImg = (indexImg + 1) % imagens.length;
+  tagImg.src = imagens[indexImg];
+});
 
 /*------------------Lógica do Sorteio--------------------- */
 // Busque dados salvos no Local Storage
+
 let jogadores = localStorage.jogadores
   ? JSON.parse(localStorage.getItem("jogadores"))
   : [];
