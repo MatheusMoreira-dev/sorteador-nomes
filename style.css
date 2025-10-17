@@ -119,7 +119,7 @@ main {
 
 #lista-participantes li {
   break-inside: avoid;
-  word-break: break-all;
+  hyphens: auto;
 }
 
 #lista-ganhadores li,

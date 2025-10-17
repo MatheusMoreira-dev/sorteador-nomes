@@ -75,6 +75,8 @@ window.addEventListener("load", () => {
 });
 
 buttonClear.addEventListener("click", () => {
+  jogadores = [];
+  ganhadores = [];
   deleteAll();
   listaJogadores.innerHTML = "";
   listaGanhadores.innerHTML = "";
