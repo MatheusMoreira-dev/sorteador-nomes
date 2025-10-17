@@ -1,5 +1,4 @@
 /*------------------Funções Utilitárias--------------------- */
-
 // Transforma uma String em um array separado por '\n'
 function splitString(str = "") {
   return str
@@ -8,136 +7,132 @@ function splitString(str = "") {
     .filter((s) => !/^\s*$/.test(s));
 }
 
-// Adiciona um item ao final de um nó
-function appendTo({ node, value, tag = "li" }) {
-  let child = document.createElement(tag);
-  child.textContent = value;
-  child.value = value;
+//CRUD Lista HTML
+function createTag({ value, textContent, tag = "li", attributes = [] }) {
+  let element = document.createElement(tag);
+  element.textContent = textContent;
+  element.value = value;
 
-  node.appendChild(child);
+  attributes.forEach((keyValue) => (element[keyValue.k] = keyValue.v));
+  return element;
 }
 
-// Remove um item de um nó com base no tipo da tag
-function removeFrom({ node, index, tag = "li" }) {
-  let item = node.querySelector(`${tag}:nth-child(${index + 1})`);
-
-  if (item) {
-    item.remove();
-  }
+function loadListaHtml({ container, node, tags = [] }) {
+  container.style.display = "block";
+  node.innerHTML = "";
+  node.append(...tags);
 }
-
-// Transforma um node em um array de valores
-function nodeToList({ nodeList, callBack }) {
-  let array = Array.from(nodeList);
-
-  if (callBack) {
-    return array.map((v) => callBack(v));
-  }
-
-  return array;
-}
+// CRUD Local Storage
+const save = (key, value) => localStorage.setItem(key, JSON.stringify(value));
+const read = (key) => JSON.parse(localStorage.getItem(key));
+const deleteKey = (key) => localStorage.removeItem(key);
+const deleteAll = () => localStorage.clear();
 
 /*------------------Elementos---------------------*/
-
 // Inputs
 let inputNomes = document.getElementById("add-nomes");
 let sorteiosPorRodada = document.getElementById("total-sorteios");
 
 // Participantes
 let buttonAdd = document.getElementById("addNome");
-let containerParticipantes = document.querySelector(".container-participants");
-let listaParticipantes = document.getElementById("lista-participantes");
+let containerJogadores = document.querySelector(".container-participants");
+let listaJogadores = document.getElementById("lista-participantes");
 
 // Ganhadores
 let containerGanhadores = document.querySelector(".container-last-winners");
 let listaGanhadores = document.getElementById("lista-ganhadores");
 
-/*------------------Lógica do Sorteio--------------------- */
-
-localStorage.setItem("participantes", JSON.stringify([]));
-localStorage.setItem("ganhadores", JSON.stringify([]));
-
-function updateStorage({ key, item }) {
-  localStorage.setItem(String(key), JSON.stringify(item));
-}
-
-function resetStorage() {
-  let qtdItens = localStorage.length;
-
-  for (let i = 0; i < qtdItens; i++) {
-    let key = localStorage.key(i);
-    localStorage.setItem(key, "");
-  }
-}
-
-// Adiciona participante(s) na lista
-function addParticipantes() {
-  let jogadores = splitString(inputNomes.value);
-  jogadores.forEach((j) => appendTo({ node: listaParticipantes, value: j }));
-
-  inputNomes.value = "";
-  containerParticipantes.style.display = "block";
-}
-
-// Sorteia um item
-function sortear() {
-  let arrayParticipantes = nodeToList({
-    nodeList: listaParticipantes.childNodes,
-    callBack: (x) => x.textContent,
+/*------------------Visual e Eventos--------------------- */
+const loadJogadores = () => {
+  loadListaHtml({
+    container: containerJogadores,
+    node: listaJogadores,
+    tags: jogadores.map((j) =>
+      createTag({ node: listaJogadores, textContent: j })
+    ),
   });
+};
 
-  let randomIndex = parseInt(Math.random() * arrayParticipantes.length);
-  let ganhador = arrayParticipantes[randomIndex];
+const loadGanhadores = () => {
+  loadListaHtml({
+    container: containerGanhadores,
+    node: listaGanhadores,
+    tags: ganhadores.map((g) =>
+      createTag({ node: listaGanhadores, textContent: g })
+    ),
+  });
+};
 
-  removeFrom({ node: listaParticipantes, index: randomIndex });
-  appendTo({ node: listaGanhadores, value: ganhador });
+window.addEventListener("load", () => {
+  if (localStorage.jogadores) {
+    loadJogadores();
+  }
+
+  if (localStorage.ganhadores) {
+    loadGanhadores();
+  }
+});
+
+let tagImg = document.getElementById("patrocinador-item");
+
+function alterarImagem() {
+  let imagens = ["assets/paraiso.png", "assets/M7.png"];
+  console.log(tagImg.src);
+  tagImg.src = imagens.find((s) => s != tagImg.src);
+}
+
+tagImg.addEventListener("click", alterarImagem);
+
+/*------------------Lógica do Sorteio--------------------- */
+// Busque dados salvos no Local Storage
+let jogadores = localStorage.jogadores
+  ? JSON.parse(localStorage.getItem("jogadores"))
+  : [];
+
+let ganhadores = localStorage.ganhadores
+  ? JSON.parse(localStorage.getItem("ganhadores"))
+  : [];
+
+function addJogadores() {
+  // Adiciona novos jogadores e salva no local storage
+  jogadores.push(...splitString(inputNomes.value));
+  save("jogadores", jogadores);
+
+  inputNomes.value = ""; //Limpa Input
+  loadJogadores(); // Atualiza lista html dos jogadores
+}
+
+function sortear() {
+  // Sorteia um nome entre os jogadores
+  let randomIndex = parseInt(Math.random() * jogadores.length);
+  let ganhador = jogadores[randomIndex];
+
+  // Retira o ganhador da lista de jogadores
+  jogadores.splice(randomIndex, 1);
+  save("jogadores", jogadores);
+
+  // Salva o ganhador na lista
+  ganhadores.push(ganhador);
+  save("ganhadores", ganhadores);
 
   return ganhador;
 }
 
-// Executa o Sorteio
 function sorteio() {
-  let ganhadores = [];
+  let ganhadoresSorteio = [];
 
   for (let i = 0; i < sorteiosPorRodada.value; i++) {
-    ganhadores.push(`${i + 1} - ${sortear()}`);
+    let ganhador = sortear();
+    ganhadoresSorteio.push(`${i + 1} - ${ganhador}`);
   }
 
-  containerGanhadores.style.display = "block";
-  return ganhadores;
+  loadGanhadores(); // Atualiza lista html de ganhadores
+  loadJogadores(); // Atualiza lista html dos jogadores
+
+  return ganhadoresSorteio;
 }
-
-/*------------------Conteúdo Dinâmico--------------------- */
-
-const templateColunas = {
-  alturaMaxColuna: 400,
-  unidade: "px",
-  qtdMaxColunas: 4,
-};
-
-function calcularColunas({ alturaMaxColuna, unidade, qtdMaxColunas, lista }) {
-  /*
-  display: grid;
-  grid-auto-flow: column; 
-  gap: 10px;
-  grid-auto-rows: minmax(2rem, auto); 
-  max-height: 400px;
-  overflow-y: auto;
-  justify-content: start;
-  */
-
-  const colunasAtuais = Math.ceil(lista.scrollHeight / alturaMaxColuna);
-  if (colunasAtuais > qtdMaxColunas) {
-    lista.style.maxHeight = `${
-      alturaMaxColuna / (colunasAtuais / 4)
-    }${unidade}`;
-  }
-}
-
-buttonAdd.addEventListener("click", calcularColunas(templateColunas));
 
 /*------------------Modal do Resultado---------------------*/
-
 const modal = document.getElementById("modal");
 const fecharModal = document.getElementById("fecharModal");
 const ganhadoresRodada = document.getElementById("ganhadores-da-rodada");

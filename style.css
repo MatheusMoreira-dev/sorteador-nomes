@@ -96,8 +96,6 @@ main {
 
 .container-participants {
   display: none;
-  max-width: 90dvw;
-  max-height: 30dvh;
   padding: 1rem;
   border-radius: 1rem;
   overflow-y: auto;
@@ -112,12 +110,11 @@ main {
 
 #lista-participantes {
   display: grid;
-  grid-auto-flow: column;
-  grid-template-rows: repeat(auto-fill, minmax(1rem, auto));
+  text-align: center;
   grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-  max-width: 800px; /* ~4 colunas */
+  max-width: 90dvw;
+  max-height: 30dvh;
   gap: 10px;
-  max-height: 400px;
 }
 
 #lista-participantes li {
