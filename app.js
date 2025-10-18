@@ -145,7 +145,9 @@ function addJogadores() {
 }
 
 function numeroAleatorio(max) {
-  return Math.floor(Math.random() * max);
+  const array = new Uint32Array(1);
+  window.crypto.getRandomValues(array);
+  return Math.floor((array[0] / (4294967295 + 1)) * max);
 }
 
 function sortear() {
