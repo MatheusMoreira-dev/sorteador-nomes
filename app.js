@@ -150,6 +150,17 @@ function numeroAleatorio(max) {
   return Math.floor((array[0] / (4294967295 + 1)) * max);
 }
 
+function teoriaDosGrandesNumeros(nomes = [], iterações) {
+  let contagem = nomes.map((n) => ({ nome: n, vitorias: 0 }));
+
+  for (let i = 0; i < iterações; i++) {
+    let ganhador = contagem[numeroAleatorio(contagem.length)];
+    ganhador.vitorias += 1;
+  }
+
+  return contagem;
+}
+
 function sortear() {
   // Sorteia um nome entre os jogadores
   let randomIndex = numeroAleatorio(jogadores.length);
