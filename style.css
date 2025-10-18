@@ -114,7 +114,6 @@ main {
   grid-template-columns: repeat(4, 1fr);
   gap: 1rem;
   max-width: 90dvw;
-  min-width: 50dvw;
   max-height: 30dvh;
 }
 
@@ -125,7 +124,7 @@ main {
 
 #lista-ganhadores li,
 #lista-participantes li {
-  font-size: 1.5rem;
+  font-size: 1rem;
   font-weight: 500;
 }
 
