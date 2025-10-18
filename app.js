@@ -138,20 +138,24 @@ let ganhadores = localStorage.ganhadores
 function addJogadores() {
   // Adiciona novos jogadores e salva no local storage
   jogadores.push(...excludeEqualsValues(splitString(inputNomes.value)));
-  save("jogadores", jogadores);
+  save("jogadores", jogadores.sort());
 
   inputNomes.value = ""; //Limpa Input
   loadJogadores(); // Atualiza lista html dos jogadores
 }
 
+function numeroAleatorio(max) {
+  return Math.floor(Math.random() * max);
+}
+
 function sortear() {
   // Sorteia um nome entre os jogadores
-  let randomIndex = parseInt(Math.random() * jogadores.length);
+  let randomIndex = numeroAleatorio(jogadores.length);
   let ganhador = jogadores[randomIndex];
 
   // Retira o ganhador da lista de jogadores
   jogadores.splice(randomIndex, 1);
-  save("jogadores", jogadores);
+  save("jogadores", jogadores.sort());
 
   // Salva o ganhador na lista
   ganhadores.push(ganhador);
